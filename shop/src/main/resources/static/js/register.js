@@ -1,5 +1,21 @@
 $(document).ready(
 		function() {
+			$( "#pwd1" ).focus(function() {
+				console.log("focus");
+				$.ajax({
+						type : "GET",
+						dataType : "json",
+						url : "/users/" + encodeURIComponent(userInfo.email),
+						success : function(data){
+							var emailNotValid = data.emailExists;
+							$("#email-exists").hide();
+							if (emailNotValid) {
+								$("#email-exists").text("This email is already in use").show();
+							}
+						}
+				});
+			});
+				
 			$('.registerbtn').click(submitForm);
 			$('.form-group input').on(
 					'focus blur',
@@ -12,12 +28,12 @@ $(document).ready(
 				// Validate empty fields
                 
 				if (validateInput(userInfo)) {
-					$.ajax({
-						type : "GET",
-						dataType : "json",
-						url : "URL",         ///todo cand o fi restu gata
-						success : checkUser
-					});
+					// $.ajax({
+					// 	type : "GET",
+					// 	dataType : "json",
+					// 	url : "/users/" + encodeURIComponent(userInfo.email),
+					// 	success : checkUser
+					// });
 				}
 
 			}
@@ -72,6 +88,7 @@ $(document).ready(
 					return true;
 				}
 			}
+			
 
 			function checkUser(data) {
 				var emailNotValid = data.emailExists;
