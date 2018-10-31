@@ -5,12 +5,15 @@ $(document).ready(
 				$.ajax({
 						type : "GET",
 						dataType : "json",
-						url : "/users/" + encodeURIComponent(userInfo.email),
+						url : "/users/" + encodeURIComponent(userInfo.emailAddress),
 						success : function(data){
 							var emailNotValid = data.emailExists;
 							$("#email-exists").hide();
 							if (emailNotValid) {
-								$("#email-exists").text("This email is already in use").show();
+								$("#email-exists").text("This email address is already in use").show();
+							}
+							else {
+								$("email-exists").hide();	
 							}
 						}
 				});
@@ -23,20 +26,7 @@ $(document).ready(
 						$(this).parents('.form-group').toggleClass('active',
 								(e.type === 'focus' || this.value.length > 0));
 					}).trigger('blur');
-			function submitForm() {
-				var userInfo = getUserInfo();
-				// Validate empty fields
-                
-				if (validateInput(userInfo)) {
-					// $.ajax({
-					// 	type : "GET",
-					// 	dataType : "json",
-					// 	url : "/users/" + encodeURIComponent(userInfo.email),
-					// 	success : checkUser
-					// });
-				}
-
-			}
+		
 			$(".registration-successful").hide();
 			function validateEmail(email) {
 				var re = /\S+@\S+\.\S+/;
@@ -47,12 +37,12 @@ $(document).ready(
 				return {
 					"firstName" : $('#first-name').val(),
 					"lastName" : $('#last-name').val(),
-					"email" : $('#email').val(),
+					"emailAddress" : $('#email').val(),
 					"password" : $('#pwd1').val(),
 					"passwordVerify" : $('#pwd2').val()
 				};
 			}
-
+			var userInfo = getUserInfo();
 			function validateInput(userInfo) {
 				if (userInfo.firstName.length < 5) {
 					$("#error-first-name").text(
@@ -65,7 +55,7 @@ $(document).ready(
 							"Last name should be at least 5 characters long.")
 							.show();
 					return false;
-				} else if (!validateEmail(userInfo.email)) {
+				} else if (!validateEmail(userInfo.emailAddress)) {
 					$(".error").hide();
 					$("#error-email").text(
 							"Please enter a valid email address.")
@@ -90,12 +80,9 @@ $(document).ready(
 			}
 			
 
-			function checkUser(data) {
-				var emailNotValid = data.emailExists;
-				$("#email-exists").hide();
-				if (emailNotValid) {
-					$("#email-exists").text("This email is already in use").show();
-				} else {
+			function submitForm(data) {
+				var userInfo = getUserInfo();
+				if(validateInput(userInfo)) {
 					$.ajax({
 						type : "POST",
 						url : "/signup",

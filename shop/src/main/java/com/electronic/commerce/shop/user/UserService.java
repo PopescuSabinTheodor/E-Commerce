@@ -16,5 +16,17 @@ public class UserService {
 		}
 		return userValidation;
 	}
-
+	
+	public User getFormUser(UserDto userDto) {
+		
+		User user = new User();
+		user.setFirstName(userDto.getFirstName());
+		user.setLastName(userDto.getLastName());
+		user.setEmailAddress(userDto.getEmailAddress());
+		System.out.println(userDto.getEmailAddress());
+		user.setHomeAddress("");
+		user.setPhoneNumber("");
+		user.setRole(1);
+		return user;
+	}
 }
