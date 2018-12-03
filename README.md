@@ -1,2 +1,0 @@
-# Comert Electronic
-
