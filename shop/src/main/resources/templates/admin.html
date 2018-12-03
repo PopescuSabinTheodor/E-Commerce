@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Admin</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/admin.js"></script>
+</head>
+<body>
+	<div id="addProduct" class="form-box">
+		<div class="head">Add new product</div>
+		<form action="#" id="add-form" name="add">
+			<div class="form-group">
+				<label class="label-control"> <span class="label-text">Name</span>
+				</label> <input type="text" name="name" id="name" class="required" />
+			</div>
+			<div id="error-name" class="error"></div>
+			<div class="form-group">
+				<label class="label-control"> <span class="label-text">Description</span>
+				</label> <input type="text" name="description" id="description"
+					class="required" />
+			</div>
+			<div id="error-description" class="error"></div>
+			<div class="form-group">
+				<label class="label-control"> <span class="label-text">Specifications</span>
+				</label> <input type="text" name="specifications" id="specifications"
+					class="required" />
+			</div>
+			<div id="error-specifications" class="error"></div>
+			<div class="form-group">
+				<label class="label-control"> <span class="label-text">Stock</span>
+				</label> <input type="text" name="stock" id="stock" class="required" />
+			</div>
+			<div id="error-stock" class="error"></div>
+			<div class="form-group">
+				<label class="label-control"> <span class="label-text">Price</span>
+				</label> <input type="text" name="price" id="price" class="required" />
+			</div>
+			<div id="error-price" class="error"></div>
+			<div id="error-category" class="error"></div>
+			<div class="form-group">
+				<label class="label-control"> <span class="label-text">Category</span>
+				</label> <select name="category">
+					<option value="items"></option>
+				</select>
+				<div class="addBtn">
+					<span><button type="button" class="addbtn">Add</button></span>
+				</div>
+				<div class="cancel">
+					<p>
+						<a href="todo"> Cancel </a>
+					</p>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+
+</html>

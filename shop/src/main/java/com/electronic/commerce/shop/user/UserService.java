@@ -3,6 +3,11 @@ package com.electronic.commerce.shop.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * User service
+ * @author Sabin Theodor
+ *
+ */
 @Service
 public class UserService {
 	
@@ -23,10 +28,11 @@ public class UserService {
 		user.setFirstName(userDto.getFirstName());
 		user.setLastName(userDto.getLastName());
 		user.setEmailAddress(userDto.getEmailAddress());
-		System.out.println(userDto.getEmailAddress());
+		user.setPassword(userDto.getPassword());
 		user.setHomeAddress("");
 		user.setPhoneNumber("");
-		user.setRole(1);
+		user.setRoleId(1);
+		user.setStatus("Unapproved");
 		return user;
 	}
 }

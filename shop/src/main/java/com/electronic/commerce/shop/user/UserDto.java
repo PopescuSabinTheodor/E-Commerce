@@ -1,5 +1,10 @@
 package com.electronic.commerce.shop.user;
 
+/**
+ * User data transfer object class
+ * @author Sabin Theodor
+ *
+ */
 public class UserDto {
 	
 	private String firstName;

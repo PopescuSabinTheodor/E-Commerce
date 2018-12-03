@@ -166,7 +166,7 @@ button.registerbtn[type="button"]:hover {
 }
 .error {
 	color: red;
-	font-size: 10px;
+	font-size: 13px;
 }
 
 .registration-successful {

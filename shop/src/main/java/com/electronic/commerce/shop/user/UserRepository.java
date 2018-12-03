@@ -1,9 +1,13 @@
 package com.electronic.commerce.shop.user;
 
 import java.util.Optional;
-
 import org.springframework.data.repository.CrudRepository;
 
+/**
+ * Interface for CRUD operations on Users
+ * @author Sabin Theodor
+ *
+ */
 public interface UserRepository extends CrudRepository<User, Long> {
 	
 	/**

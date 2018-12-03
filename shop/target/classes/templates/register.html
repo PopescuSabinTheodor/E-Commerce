@@ -4,7 +4,7 @@
 <title>Register</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="/js/register.js"></script>
 <link rel="stylesheet" href="/css/register.css">
 </head>
@@ -35,6 +35,7 @@
 			</label>
 			<input type="email" name="email" id="email" class="required"/>
 		</div>
+		<div id="email-exists" class="error"></div>
 		<div id="error-email" class="error"></div>
 		<div class="form-group">
 			<label class="label-control">
@@ -50,7 +51,6 @@
 			<input type="password" name="passwordVerify" id="pwd2" class="required"/>
 		</div>
 		<div id="error-passwordVerify" class="error"></div>
-		<div id="email-exists" class="error"></div>
 		<div class="registerBtn">
 			<span><button type="button" class="registerbtn">SIGN UP</button></span>
 		</div>

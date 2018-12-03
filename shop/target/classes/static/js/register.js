@@ -1,25 +1,43 @@
 $(document).ready(
+	//Entry function
 		function() {
-			$( "#pwd1" ).focus(function() {
-				console.log("focus");
-				$.ajax({
-						type : "GET",
-						dataType : "json",
-						url : "/users/" + encodeURIComponent(userInfo.emailAddress),
-						success : function(data){
-							var emailNotValid = data.emailExists;
-							$("#email-exists").hide();
-							if (emailNotValid) {
-								$("#email-exists").text("This email address is already in use").show();
+			//Counts how many times the email field loses focus
+			var focusCount = 0;
+			$( "#email" ).blur(function() {
+				focusCount++;
+				//The whole form gets focused once and loses the focus so we need to validate the email field
+				//when it loses the second focus on
+				if(validateEmail($('#email').val())&& focusCount > 1) {
+					//Get request checking if the email address is already in use
+					$.ajax({
+							type : "GET",
+							dataType : "json",
+							url : "/users/" + encodeURIComponent($('#email').val()),
+							error : function() {
+							},
+							success : function(data){
+								var emailNotValid = data.emailExists;
+								$("#email-exists").hide();
+								if (emailNotValid) {
+									$("#email-exists").text("This email address is already in use").show();
+								}
+								else {
+									$("email-exists").hide();	
+								}
 							}
-							else {
-								$("email-exists").hide();	
-							}
-						}
-				});
+					});
+			}
+			else if(focusCount > 1) {
+				$("#error-email").text(
+							"Please enter a valid email address.")
+							.show();
+			}
 			});
-				
+
+			
 			$('.registerbtn').click(submitForm);
+
+			//Animation effect
 			$('.form-group input').on(
 					'focus blur',
 					function(e) {
@@ -28,11 +46,14 @@ $(document).ready(
 					}).trigger('blur');
 		
 			$(".registration-successful").hide();
+			//Regex for validating the email format
 			function validateEmail(email) {
 				var re = /\S+@\S+\.\S+/;
 				return re.test(email);
 			}
 
+		
+			//Builds a User JSON
 			function getUserInfo() {
 				return {
 					"firstName" : $('#first-name').val(),
@@ -42,7 +63,8 @@ $(document).ready(
 					"passwordVerify" : $('#pwd2').val()
 				};
 			}
-			var userInfo = getUserInfo();
+			
+			//Validates fields
 			function validateInput(userInfo) {
 				if (userInfo.firstName.length < 5) {
 					$("#error-first-name").text(
@@ -79,7 +101,7 @@ $(document).ready(
 				}
 			}
 			
-
+			//POST request that submits the form
 			function submitForm(data) {
 				var userInfo = getUserInfo();
 				if(validateInput(userInfo)) {
