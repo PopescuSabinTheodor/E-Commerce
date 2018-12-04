@@ -1,12 +1,26 @@
 package com.electronic.commerce.shop.user;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Class representing a user's role
  * @author Sabin Theodor
  *
  */
+@Entity(name = "roles")
 public class Role {
 	
+	
+	
+	/**
+	 * Holds the role id
+	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer roleId;
 	/**
 	 * Holds the name of the role
 	 */
@@ -19,6 +33,14 @@ public class Role {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 
 }

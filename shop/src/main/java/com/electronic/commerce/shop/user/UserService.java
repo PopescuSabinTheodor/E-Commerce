@@ -1,5 +1,7 @@
 package com.electronic.commerce.shop.user;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +36,11 @@ public class UserService {
 		user.setRoleId(1);
 		user.setStatus("Unapproved");
 		return user;
+	}
+
+	public User findUserByEmail(String emailAddress) {
+		// TODO Auto-generated method stub
+		Optional<User> optionalUser = userRepository.findOneByEmailAddress(emailAddress);
+		return optionalUser.get();
 	}
 }
