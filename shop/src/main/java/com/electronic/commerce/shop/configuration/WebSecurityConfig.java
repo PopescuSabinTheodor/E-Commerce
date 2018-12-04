@@ -5,20 +5,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.Filter;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -44,6 +49,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserOAuthRepository userOAuthRepository;
+
+	@Autowired
+	private DataSource dataSource;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Value("${spring.queries.users-query}")
+	private String usersQuery;
+
+	@Value("${spring.queries.roles-query}")
+	private String rolesQuery;
+	
+	
 
 	@RequestMapping({ "/user", "/me" })
 	public Principal user(Principal principal) {
@@ -143,26 +162,47 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity https) throws Exception {
 
 		https.antMatcher("/**").authorizeRequests()
-				.antMatchers("/admin/**","/", "/resources/**", "/signup", "/verification/**", "/users", "/error", "/loginForm", "/login", "/login/google", "/login/facebook",
+				.antMatchers("/register","/", "/resources/**", "/signup", "/verification/**", "/users", "/error", "/loginForm", "/login", "/login/google", "/login/facebook",
 						"/login/github", "/users", "/images/**", "/*.png", "/favicon.ico", "/templates/**",
 						"/static/**", "/css/**", "/js/**", "src/main/resources/**", "/**.js", "/static/css/**.css", "/static/js/**.js",
 						"/**.ico")
-				.permitAll().anyRequest().authenticated().and().exceptionHandling().and().formLogin()
+				.permitAll().antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest().authenticated().and().exceptionHandling().and().formLogin()
 				.loginPage("/loginForm").defaultSuccessUrl("/").permitAll().and().logout()
-				.logoutSuccessUrl("/").and()
+				.logoutSuccessUrl("/")                     
+	            .invalidateHttpSession(true)                                                                             
+	            .deleteCookies("").and()
 				//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
 				.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class).csrf().disable();
 	}
 	
+	 @Override
+	    public void configure(WebSecurity web) throws Exception {
+	        web
+	                .ignoring()
+	                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+	    }
+	 
+	 
+	  @Override
+	    protected void configure(AuthenticationManagerBuilder auth)
+	            throws Exception {
+	        auth.
+	                jdbcAuthentication()
+	                .usersByUsernameQuery(usersQuery)
+	                .authoritiesByUsernameQuery(rolesQuery)
+	                .dataSource(dataSource)
+	                .passwordEncoder(bCryptPasswordEncoder);
+	    }
+	
 
 	
-	@Bean
-	@Override
-	public UserDetailsService userDetailsService() {
-		@SuppressWarnings("deprecation")
-		UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER")
-				.build();
-
-		return new InMemoryUserDetailsManager(user);
-	}
+//	@Bean
+//	@Override
+//	public UserDetailsService userDetailsService() {
+//		@SuppressWarnings("deprecation")
+//		UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER")
+//				.build();
+//
+//		return new InMemoryUserDetailsManager(user);
+//	}
 }

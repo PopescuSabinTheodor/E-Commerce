@@ -7,12 +7,15 @@ import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.electronic.commerce.shop.mailer.EmailService;
@@ -114,4 +117,18 @@ public class RegistrationController {
 			return redirectView;
 		}
 	}
+	
+	
+	
+	 @RequestMapping(value="/admin", method = RequestMethod.GET)
+	    public ModelAndView home(){
+	        ModelAndView modelAndView = new ModelAndView();
+	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        User user = userService.findUserByEmail(auth.getName());
+	        modelAndView.addObject("userName", "Welcome " + user.getFirstName() + " " + user.getLastName() + " (" + user.getEmailAddress() + ")");
+	        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
+	        modelAndView.setViewName("admin");
+	        return modelAndView;
+	    }
+	
 }

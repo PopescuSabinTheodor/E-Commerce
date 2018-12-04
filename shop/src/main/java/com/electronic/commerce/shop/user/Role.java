@@ -20,7 +20,7 @@ public class Role {
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer roleId;
+	private Integer role_id;
 	/**
 	 * Holds the name of the role
 	 */
@@ -36,11 +36,11 @@ public class Role {
 	}
 
 	public Integer getRoleId() {
-		return roleId;
+		return role_id;
 	}
 
 	public void setRoleId(Integer roleId) {
-		this.roleId = roleId;
+		this.role_id = roleId;
 	}
 
 }
